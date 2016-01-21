@@ -90,7 +90,7 @@ class Cparser(object):
 
     def p_init(self, p):
         """init : ID '=' expression """
-        p[0] = AST.Init(p[1], p[3])
+        p[0] = AST.Init(p.lineno(1), p[1], p[3])
 
     def p_instructions_opt(self, p):
         """instructions_opt : instructions
@@ -128,14 +128,14 @@ class Cparser(object):
         """print_instr : PRINT expr_list ';'
                        | PRINT error ';' """
         if len(p) == 4:
-            p[0] = AST.PrintInstruction(p[2])
+            p[0] = AST.PrintInstruction(p.lineno(1), p[2])
 
     def p_labeled_instr(self, p):
         """labeled_instr : ID ':' instruction """
 
     def p_assignment(self, p):
         """assignment : ID '=' expression ';' """
-        p[0] = AST.Assignment(p[1], p[3])
+        p[0] = AST.Assignment(p.lineno(1), p[1], p[3])
 
     def p_choice_instr(self, p):
         """choice_instr : IF '(' condition ')' instruction  %prec IFX
@@ -158,19 +158,19 @@ class Cparser(object):
 
     def p_return_instr(self, p):
         """return_instr : RETURN expression ';' """
-        p[0] = AST.ReturnInstruction(p[2])
+        p[0] = AST.ReturnInstruction(p.lineno(1), p[2])
 
     def p_continue_instr(self, p):
         """continue_instr : CONTINUE ';' """
-        p[0] = AST.Continue()
+        p[0] = AST.Continue(p.lineno(1), )
 
     def p_break_instr(self, p):
         """break_instr : BREAK ';' """
-        p[0] = AST.Break()
+        p[0] = AST.Break(p.lineno(1), )
 
     def p_compound_instr(self, p):
         """compound_instr : '{' declarations instructions_opt '}' """
-        p[0] = AST.CompoundInstruction(p[2], p[3])
+        p[0] = AST.CompoundInstruction(p.lineno(1), p[2], p[3])
 
     def p_condition(self, p):
         """condition : expression"""
@@ -181,11 +181,11 @@ class Cparser(object):
                  | FLOAT
                  | STRING"""
         if re.match(r"\d+(\.\d*)|\.\d+", p[1]):
-            p[0] = AST.Float(p[1])
+            p[0] = AST.Float(p.lineno(1), p[1])
         elif re.match(r"\d+", p[1]):
-            p[0] = AST.Integer(p[1])
+            p[0] = AST.Integer(p.lineno(1), p[1])
         else:
-            p[0] = AST.String(p[1])
+            p[0] = AST.String(p.lineno(1), p[1])
 
     def p_expression(self, p):
         """expression : const
@@ -217,14 +217,14 @@ class Cparser(object):
             if isinstance(p[1], AST.Const):
                 p[0] = p[1]
             else:
-                p[0] = AST.Variable(p[1])
+                p[0] = AST.Variable(p.lineno(1), p[1])
 
         elif p[1] == '(':
             p[0] = p[2]
         elif p[2] == '(':
-            p[0] = AST.FunctionCall(p[1], p[3])
+            p[0] = AST.FunctionCall(p.lineno(1), p[1], p[3])
         else:
-            p[0] = AST.BinExpr(p[1], p[2], p[3])
+            p[0] = AST.BinExpr(p.lineno(1), p[1], p[2], p[3])
 
     def p_expr_list_or_empty(self, p):
         """expr_list_or_empty : expr_list
@@ -246,7 +246,7 @@ class Cparser(object):
 
     def p_fundef(self, p):
         """fundef : TYPE ID '(' args_list_or_empty ')' compound_instr """
-        p[0] = AST.FunctionDefinition(p[1], p[2], p[4], p[6])
+        p[0] = AST.FunctionDefinition(p.lineno(1), p[1], p[2], p[4], p[6])
 
     def p_args_list_or_empty(self, p):
         """args_list_or_empty : args_list
@@ -268,4 +268,4 @@ class Cparser(object):
 
     def p_arg(self, p):
         """arg : TYPE ID """
-        p[0] = AST.Arg(p[1], p[2])
+        p[0] = AST.Arg(p.lineno(1), p[1], p[2])

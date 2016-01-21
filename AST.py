@@ -1,34 +1,39 @@
 class Node(object):
-    def __str__(self):
-        return self.printTree("")
+    pass
 
 
 class BinExpr(Node):
-    def __init__(self, left, op, right):
+    def __init__(self, line, left, op, right):
+        self.line = line
         self.op = op
         self.left = left
         self.right = right
 
 
 class Const(Node):
-    def __init__(self, value):
+    def __init__(self, line, value):
+        self.line = line
         self.value = value
 
 
 class Integer(Const):
-    pass
+    def __init__(self, line, value):
+        Const.__init__(self, line, value)
 
 
 class Float(Const):
-    pass
+    def __init__(self, line, value):
+        Const.__init__(self, line, value)
 
 
 class String(Const):
-    pass
+    def __init__(self, line, value):
+        Const.__init__(self, line, value)
 
 
 class Variable(Node):
-    def __init__(self, id):
+    def __init__(self, line, id):
+        self.line = line
         self.id = id
 
 
@@ -63,7 +68,8 @@ class Inits(Node):
 
 
 class Init(Node):
-    def __init__(self, id, expression):
+    def __init__(self, line, id, expression):
+        self.line = line
         self.id = id
         self.expression = expression
 
@@ -77,18 +83,20 @@ class Instructions(Node):
 
 
 class PrintInstruction(Node):
-    def __init__(self, expression):
+    def __init__(self, line, expression):
+        self.line = line
         self.expression = expression
 
 
 class Assignment(Node):
-    def __init__(self, id, expression):
+    def __init__(self, line, id, expression):
+        self.line = line
         self.id = id
         self.expression = expression
 
 
 class IfInstruction(Node):
-    def __init__(self, condition, ifInstruction, elseInstruction = None):
+    def __init__(self, condition, ifInstruction, elseInstruction=None):
         self.condition = condition
         self.ifInstruction = ifInstruction
         self.elseInstruction = elseInstruction
@@ -107,26 +115,31 @@ class RepeatInstruction(Node):
 
 
 class ReturnInstruction(Node):
-    def __init__(self, expression):
+    def __init__(self, line, expression):
+        self.line = line
         self.expression = expression
 
 
 class Continue(Node):
-    pass
+    def __init__(self, line):
+        self.line = line
 
 
 class Break(Node):
-    pass
+    def __init__(self, line):
+        self.line = line
 
 
 class CompoundInstruction(Node):
-    def __init__(self, declarations, instructions):
+    def __init__(self, line, declarations, instructions):
+        self.line = line
         self.declarations = declarations
         self.instructions = instructions
 
 
 class FunctionCall(Node):
-    def __init__(self, id, arglist):
+    def __init__(self, line, id, arglist):
+        self.line = line
         self.id = id
         self.argList = arglist
 
@@ -140,7 +153,8 @@ class Expressions(Node):
 
 
 class FunctionDefinition(Node):
-    def __init__(self, type, id, args, body):
+    def __init__(self, line, type, id, args, body):
+        self.line = line
         self.type = type
         self.id = id
         self.args = args
@@ -156,6 +170,7 @@ class Args(Node):
 
 
 class Arg(Node):
-    def __init__(self, type, id):
+    def __init__(self, line, type, id):
+        self.line = line
         self.type = type
         self.id = id
