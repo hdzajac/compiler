@@ -1,7 +1,7 @@
 import sys
 import ply.yacc as yacc
 from Cparser import Cparser
-import TreePrinter
+from Interpreter import Interpreter
 from TypeChecker import TypeChecker
 
 if __name__ == '__main__':
@@ -20,3 +20,4 @@ if __name__ == '__main__':
     #print(ast)
     typeChecker = TypeChecker()
     typeChecker.visit(ast)
+    ast.accept(Interpreter())
