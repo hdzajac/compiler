@@ -110,9 +110,13 @@ class TypeChecker(NodeVisitor):
 
     def visit_IfInstruction(self, node):
         self.visit(node.condition)
+        self.isInLoop = True
         self.visit(node.ifInstruction)
+        self.isInLoop = False
         if node.elseInstruction is not None:
+            self.isInLoop = True
             self.visit(node.elseInstruction)
+            self.isInLoop = False
 
     def visit_WhileInstruction(self, node):
         self.visit(node.condition)

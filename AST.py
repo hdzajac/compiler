@@ -29,7 +29,9 @@ class Float(Const):
 
 class String(Const):
     def __init__(self, line, value):
-        Const.__init__(self, line, value)
+        t = value[1:-1]
+        Const.__init__(self, line, t)
+
 
 
 class Variable(Node):

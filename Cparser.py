@@ -126,9 +126,11 @@ class Cparser(object):
 
     def p_print_instr(self, p):
         """print_instr : PRINT expr_list ';'
-                       | PRINT error ';' """
+                        | PRINT error ';' """
         if len(p) == 4:
+            p[2] = p[2]
             p[0] = AST.PrintInstruction(p.lineno(1), p[2])
+
 
     def p_labeled_instr(self, p):
         """labeled_instr : ID ':' instruction """
